@@ -7,37 +7,37 @@ jobs:
     name: Run the WebGL build
     runs-on: ubuntu-latest
     steps:
-      # actions/checkout@v2 ã‚’åˆ©ç”¨ã—ã¦ä½œæ¥­ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã«
-      # Unity ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã®ä¸­èº«ã‚’ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ã—ã¦ãã‚‹
+      # actions/checkout@v2 ‚ğ—˜—p‚µ‚Äì‹ÆƒfƒBƒŒƒNƒgƒŠ‚É
+      # Unity ƒvƒƒWƒFƒNƒg‚Ì’†g‚ğƒ_ƒEƒ“ƒ[ƒh‚µ‚Ä‚­‚é
       - name: Check out my unity project.
         uses: actions/checkout@v2
 
-      # GameCI ã® Builder ã‚’åˆ©ç”¨ã—ã¦ã€
-      # Unity ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã®ãƒ“ãƒ«ãƒ‰ã‚’å®Ÿè¡Œã™ã‚‹
+      # GameCI ‚Ì Builder ‚ğ—˜—p‚µ‚ÄA
+      # Unity ƒvƒƒWƒFƒNƒg‚Ìƒrƒ‹ƒh‚ğÀs‚·‚é
       - name: Run the WebGL build
         uses: game-ci/unity-builder@v2
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
           projectPath: ./src
-          # ä»Šå›ã¯ WebGL ãƒ“ãƒ«ãƒ‰ã‚’è¡Œã„ãŸã„ãŸã‚ WebGL ã‚’æŒ‡å®šã™ã‚‹
-          # WebGL ä»¥å¤–ã®æŒ‡å®šå¯èƒ½ãªå€¤ã¯ä¸‹è¨˜ã«è¨˜è¼‰ã®å€¤ãŒåˆ©ç”¨å¯èƒ½
+          # ¡‰ñ‚Í WebGL ƒrƒ‹ƒh‚ğs‚¢‚½‚¢‚½‚ß WebGL ‚ğw’è‚·‚é
+          # WebGL ˆÈŠO‚Ìw’è‰Â”\‚È’l‚Í‰º‹L‚É‹LÚ‚Ì’l‚ª—˜—p‰Â”\
           # ref: https://docs.unity3d.com/ScriptReference/BuildTarget.html
           targetPlatform: WebGL
 
           unityVersion: 2021.3.23f1
-      # Builder ã§å‡ºåŠ›ã—ãŸ WebGL ãƒ“ãƒ«ãƒ‰ã‚’ GitHub Pages ã«ãƒ‡ãƒ—ãƒ­ã‚¤ã™ã‚‹
+      # Builder ‚Åo—Í‚µ‚½ WebGL ƒrƒ‹ƒh‚ğ GitHub Pages ‚ÉƒfƒvƒƒC‚·‚é
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.1.3
         with:
-          # GitHub Pages ãƒ‡ãƒ—ãƒ­ã‚¤ç”¨ã® Orphan ãƒ–ãƒ©ãƒ³ãƒåã‚’æŒ‡å®šã™ã‚‹
+          # GitHub Pages ƒfƒvƒƒC—p‚Ì Orphan ƒuƒ‰ƒ“ƒ`–¼‚ğw’è‚·‚é
           branch: gh-pages
 
-          # ãƒ‡ãƒ—ãƒ­ã‚¤ç”¨ãƒ“ãƒ«ãƒ‰ãƒ•ã‚©ãƒ«ãƒ€ãƒ‘ã‚¹ã‚’æŒ‡å®šã™ã‚‹
-          # GameCI ã® Builder ã¯ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã§ã¯ build ãƒ•ã‚©ãƒ«ãƒ€ã«ãƒ“ãƒ«ãƒ‰å†…å®¹ã‚’å‡ºåŠ›ã™ã‚‹
+          # ƒfƒvƒƒC—pƒrƒ‹ƒhƒtƒHƒ‹ƒ_ƒpƒX‚ğw’è‚·‚é
+          # GameCI ‚Ì Builder ‚ÍƒfƒtƒHƒ‹ƒg‚Å‚Í build ƒtƒHƒ‹ƒ_‚Éƒrƒ‹ƒh“à—e‚ğo—Í‚·‚é
           folder: build
 
-      # Builder ã§å‡ºåŠ›ã—ãŸ WebGL ãƒ“ãƒ«ãƒ‰ã‚’ã‚¢ãƒ¼ãƒ†ã‚£ãƒ•ã‚¡ã‚¯ãƒˆã§ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰å¯èƒ½ã«ã™ã‚‹
+      # Builder ‚Åo—Í‚µ‚½ WebGL ƒrƒ‹ƒh‚ğƒA[ƒeƒBƒtƒ@ƒNƒg‚Åƒ_ƒEƒ“ƒ[ƒh‰Â”\‚É‚·‚é
       - name: Upload the WebGL Build
         uses: actions/upload-artifact@v2
         with:
