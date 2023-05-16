@@ -28,14 +28,7 @@ public class BoardController : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
-        ClearAll();
-        for(int y=0; y < BOARD_HEIGHT; y++)
-        {
-            for (int x=0; x < BOARD_WIDTH; x++)
-            {
-                Settle(new Vector2Int(x, y), Random.Range(1, 7));
-            }
-        }
+
     }
     public static bool IsValidated(Vector2Int pos)
     {
