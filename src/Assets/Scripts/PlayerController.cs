@@ -24,13 +24,14 @@ public class PlayerController : MonoBehaviour
     }
     [SerializeField] PuyoController[] _puyoControllers = new PuyoController[2] { default!, default! };
     [SerializeField] BoardController boardController = default!;
-    Vector2Int _position;
+    LogicalInput _logicalInput = null;
+
+    Vector2Int _position = new Vector2Int(2, 12);
     RotState _rotate = RotState.Up;
 
     AnimationController _animationController = new AnimationController();
     Vector2Int _last_position;
     RotState _last_rotate = RotState.Up;
-    LogicalInput _logicalInput = new();
 
     int _fallCount = 0;
     int _groundFrame = GROUND_FRAMES;
@@ -38,16 +39,33 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         gameObject.SetActive(false);
-        _puyoControllers[0].SetPuyoType(PuyoType.Green);
-        _puyoControllers[1].SetPuyoType(PuyoType.Red);
+    }
+    public void SetLogicalInput(LogicalInput refernce)
+    {
+        _logicalInput = refernce;
+    }
+    public bool Spawn(PuyoType axis, PuyoType child)
+    {
+        Vector2Int position = new(2, 12);
+        RotState rotate = RotState.Up;
+        if (!CanMove(position, rotate)) return false;
 
-        _position = new Vector2Int(2, 12);
-        _rotate = RotState.Up;
+        _position = _last_position = position;
+        _rotate = _last_rotate = rotate;
+        _animationController.Set(1);
+        _fallCount = 0;
+        _groundFrame = GROUND_FRAMES;
+
+        _puyoControllers[0].SetPuyoType(axis);
+        _puyoControllers[1].SetPuyoType(child);
 
         _puyoControllers[0].SetPos(new Vector3((float)_position.x, (float)_position.y, 0.0f));
         Vector2Int posChild = CalcChildPuyoPos(_position, _rotate);
         _puyoControllers[1].SetPos(new Vector3((float)posChild.x, (float)posChild.y, 0.0f));
 
+        gameObject.SetActive(true);
+
+        return true;
     }
 
     static readonly Vector2Int[] rotate_tbl = new Vector2Int[] {
@@ -56,10 +74,7 @@ public class PlayerController : MonoBehaviour
     {
         return pos + rotate_tbl[(int)rot];
     }
-    public void SetLogicalInput(LogicalInput refernce)
-    {
-        _logicalInput = refernce;
-    }
+
     private bool CanMove(Vector2Int pos, RotState rot)
     {
         if (!boardController.CanSettle(pos)) return false;
@@ -85,29 +100,8 @@ public class PlayerController : MonoBehaviour
 
         return true;
     }
-    public bool Spawn(PuyoType axis, PuyoType child)
-    {
-        Vector2Int position = new(2, 12);
-        RotState rotate = RotState.Up;
-        if (!CanMove(position, rotate)) return false;
 
-        _position = _last_position = position;
-        _rotate = _last_rotate = rotate;
-        _animationController.Set(1);
-        _fallCount = 0;
-        _groundFrame = GROUND_FRAMES;
 
-        _puyoControllers[0].SetPuyoType(axis);
-        _puyoControllers[1].SetPuyoType(child);
-
-        _puyoControllers[0].SetPos(new Vector3((float)_position.y, 0.0f));
-        Vector2Int posChild = CalcChildPuyoPos(_position,_rotate);
-        _puyoControllers[1].SetPos(new Vector3((float)posChild.y, 0.0f));
-
-        gameObject.SetActive(true);
-
-        return true;
-    }
     bool Rotate(bool is_right)
     {
         RotState rot = (RotState)(((int)_rotate + (is_right ? +1 : +3)) & 3);
@@ -141,10 +135,12 @@ public class PlayerController : MonoBehaviour
     }
     void Settle()
     {
-        bool is_set0 = boardController.Settle(_position, (int)_puyoControllers[1].GetPuyoType());
-        Debug.Assert(!is_set0);
+        bool is_set0 = boardController.Settle(_position,
+            (int)_puyoControllers[0].GetPuyoType());
+        Debug.Assert(is_set0);
 
-        bool is_set1 = boardController.Settle(CalcChildPuyoPos(_position, _rotate), (int)_puyoControllers[1].GetPuyoType());
+        bool is_set1 = boardController.Settle(CalcChildPuyoPos(_position, _rotate),
+            (int)_puyoControllers[1].GetPuyoType());
         Debug.Assert(is_set1);
 
         gameObject.SetActive(false);
