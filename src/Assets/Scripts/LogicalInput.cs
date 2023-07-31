@@ -3,21 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LogicalInput : MonoBehaviour
+public class LogicalInput
 {
     [Flags]
     public enum Key
     {
-        Right     = 1<<0,
-        Left      = 1<<1,
-        RotR      = 1<<2,
-        RotL      = 1<<3,
-        QuickDrop = 1<<4,
-        Down      = 1<<5,
+        Right = 1 << 0,
+        Left = 1 << 1,
+        RotR = 1 << 2,
+        RotL = 1 << 3,
+        QuickDrop = 1 << 4,
+        Down = 1 << 5,
 
-        MAX       = 6,
+        MAX = 6, 
     }
-    
+
     const int KEY_REPEAT_START_TIME = 12;
     const int KEY_REPEAT_ITERATION_TIME = 1;
 
@@ -25,7 +25,8 @@ public class LogicalInput : MonoBehaviour
     Key inputTrg;
     Key inputRel;
     Key inputRep;
-    int[] _trgWaitingTime =new int[(int)Key.MAX];
+    int[] _trgWaitingTime = new int[(int)Key.MAX];
+
     public bool IsRaw(Key k)
     {
         return inputRaw.HasFlag(k);
@@ -42,17 +43,19 @@ public class LogicalInput : MonoBehaviour
     {
         return inputRep.HasFlag(k);
     }
+
     public void Clear()
     {
         inputRaw = 0;
         inputTrg = 0;
         inputRel = 0;
         inputRep = 0;
-        for(int i = 0; i < (int)Key.MAX; i++)
+        for (int i = 0; i < (int)Key.MAX; i++)
         {
             _trgWaitingTime[i] = 0;
         }
     }
+
     public void Update(Key inputDev)
     {
         inputTrg = (inputDev ^ inputRaw) & inputDev;
