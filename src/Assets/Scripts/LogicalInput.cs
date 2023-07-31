@@ -61,7 +61,7 @@ public class LogicalInput : MonoBehaviour
         inputRaw = inputDev;
 
         inputRep = 0;
-        for(int i = 0; i < (int)Key.MAX; i++)
+        for (int i = 0; i < (int)Key.MAX; i++)
         {
             if (inputTrg.HasFlag((Key)(1 << i)))
             {
@@ -69,15 +69,14 @@ public class LogicalInput : MonoBehaviour
                 _trgWaitingTime[i] = KEY_REPEAT_START_TIME;
             }
             else
-                if(inputRaw.HasFlag((Key)(1 << i)))
+            if (inputRaw.HasFlag((Key)(1 << i)))
             {
                 if (--_trgWaitingTime[i] <= 0)
                 {
-                    inputRep |=(Key)(1 << i);
+                    inputRep |= (Key)(1 << i);
                     _trgWaitingTime[i] = KEY_REPEAT_ITERATION_TIME;
                 }
             }
         }
-
     }
 }
